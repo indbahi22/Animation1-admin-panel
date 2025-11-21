@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add New User</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* CSS Variables for Theming */
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #3f37c9;
+      --success: #4cc9f0;
+      --danger: #f72585;
+      --warning: #f8961e;
+      --info: #4895ef;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --white: #ffffff;
+      --sidebar-width: 250px;
+      --transition-speed: 0.3s;
+      --animation-duration: 0.5s;
+      --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --gradient-danger: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-info: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+      --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+      --shadow-2xl: 0 25px 50px rgba(0,0,0,0.15);
+    }
+
+    /* Dark Mode Variables */
+    [data-theme="dark"] {
+      --light: #1a1d29;
+      --dark: #f8f9fa;
+      --gray: #a0a0a0;
+      --white: #1a1d29;
+      --bg-color: #0f1419;
+      --card-bg: #1a1d29;
+      --text-color: #f8f9fa;
+      --border-color: #2d3748;
+    }
+
+    /* Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color, #f5f7fa);
+      color: var(--text-color, #333);
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      scroll-behavior: smooth;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* Premium Header Styles */
+    .header {
+      background-color: var(--card-bg, var(--white));
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow-md);
+      padding: 15px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      transition: all var(--transition-speed) ease;
+      animation: slideDown 0.5s ease forwards;
+    }
+
+    [data-theme="dark"] .header {
+      background-color: rgba(26, 29, 41, 0.9);
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: fadeIn 0.8s ease 0.3s forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      animation: fadeIn 0.8s ease 0.5s forwards;
+      opacity: 0;
+    }
+
+    /* Premium Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      border: none;
+      background-color: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--card-bg, #f8f9fa);
+      color: var(--text-color, #333);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-speed) ease;
+    }
+
+    .btn-icon:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: var(--white);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--card-bg, #f8f9fa);
+      color: var(--text-color, #333);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-speed) ease;
+      cursor: pointer;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Premium Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background-color: var(--card-bg, var(--white));
+      box-shadow: var(--shadow-lg);
+      transition: all var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
+      z-index: 900;
+      overflow-y: auto;
+      overflow-x: hidden;
+      transform: translateX(0);
+    }
+
+    .sidebar.active {
+      transform: translateX(-100%);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 15px 0;
+    }
+
+    .sidebar-item {
+      margin-bottom: 5px;
+      opacity: 0;
+      animation: fadeInLeft 0.5s ease forwards;
+    }
+
+    .sidebar-item:nth-child(1) { animation-delay: 0.1s; }
+    .sidebar-item:nth-child(2) { animation-delay: 0.2s; }
+    .sidebar-item:nth-child(3) { animation-delay: 0.3s; }
+    .sidebar-item:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes fadeInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: var(--text-color, var(--gray));
+      text-decoration: none;
+      transition: all var(--transition-speed) ease;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 0 25px 25px 0;
+      margin-right: 15px;
+    }
+
+    .sidebar-link::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: var(--gradient-primary);
+      transform: scaleY(0);
+      transition: transform var(--transition-speed) ease;
+    }
+
+    .sidebar-link:hover::before, .sidebar-link.active::before {
+      transform: scaleY(1);
+    }
+
+    .sidebar-link:hover, .sidebar-link.active {
+      background-color: rgba(67, 97, 238, 0.1);
+      color: var(--primary);
+      padding-left: 25px;
+    }
+
+    .sidebar-link.active {
+      font-weight: 500;
+      background: rgba(67, 97, 238, 0.15);
+    }
+
+    .sidebar-link i {
+      transition: transform var(--transition-speed) ease;
+    }
+
+    .sidebar-link:hover i {
+      transform: translateX(3px);
+    }
+
+    /* Main Content Styles */
+    .main-content {
+      margin-top: 70px;
+      margin-left: var(--sidebar-width);
+      padding: 20px;
+      transition: all var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
+      animation: fadeIn 0.8s ease 0.7s forwards;
+      opacity: 0;
+    }
+
+    .main-content.full-width {
+      margin-left: 0;
+    }
+
+    /* Premium Card Styles */
+    .card {
+      background-color: var(--card-bg, var(--white));
+      border-radius: 15px;
+      box-shadow: var(--shadow-md);
+      padding: 25px;
+      margin-bottom: 20px;
+      animation: fadeInUp 0.5s ease 0.8s forwards;
+      opacity: 0;
+      border: 1px solid var(--border-color, rgba(0,0,0,0.05));
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color, #eee);
+      position: relative;
+    }
+
+    .card h2::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--gradient-primary);
+      transition: width var(--transition-speed) ease;
+    }
+
+    .card:hover h2::after {
+      width: 100px;
+    }
+
+    /* Premium Form Styles */
+    .form-group {
+      margin-bottom: 25px;
+      animation: fadeInUp 0.5s ease forwards;
+      opacity: 0;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.9s; }
+    .form-group:nth-child(2) { animation-delay: 1.0s; }
+    .form-group:nth-child(3) { animation-delay: 1.1s; }
+    .form-group:nth-child(4) { animation-delay: 1.2s; }
+    .form-group:nth-child(5) { animation-delay: 1.3s; }
+
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-color, #333);
+      transition: color var(--transition-speed) ease;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color, #ddd);
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all var(--transition-speed) ease;
+      background-color: var(--card-bg, #fff);
+      color: var(--text-color, #333);
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-color, var(--gray));
+      transition: all var(--transition-speed) ease;
+    }
+
+    .toggle-password:hover {
+      color: var(--primary);
+    }
+
+    /* Checkbox and Radio Styles */
+    .form-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .form-check:hover {
+      transform: translateX(5px);
+    }
+
+    .form-check-input {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .form-check-label {
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+    }
+
+    /* Result Message */
+    .form-result {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all var(--transition-speed) ease;
+    }
+
+    .form-result.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .form-result.success {
+      background-color: rgba(76, 201, 240, 0.2);
+      color: var(--success);
+    }
+
+    .form-result.error {
+      background-color: rgba(247, 37, 133, 0.2);
+      color: var(--danger);
+    }
+
+    /* Avatar Styles */
+    .user-avatar img {
+      object-fit: cover;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .user-avatar:hover img {
+      transform: scale(1.05);
+      border-radius: 50%;
+    }
+
+    .rounded-circle {
+      border-radius: 50%;
+    }
+
+    /* Save Button */
+    .save-btn {
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .save-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+
+    .save-btn:focus:not(:active)::after {
+      animation: ripple 1s ease-out;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      20% {
+        transform: scale(25, 25);
+        opacity: 0.3;
+      }
+      100% {
+        opacity: 0;
+        transform: scale(40, 40);
+      }
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Submit Button Animation */
+    .btn-primary.submitting {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    /* Maintenance Mode Warning */
+    .maintenance-warning {
+      background: var(--gradient-warning);
+      color: var(--white);
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 500;
+      animation: slideDown 0.5s ease;
+      transition: all var(--transition-speed) ease;
+      box-shadow: var(--shadow-md);
+    }
+
+    .maintenance-warning:hover {
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Overlay for mobile sidebar */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 800;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-speed) ease;
+    }
+
+    .sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .radio-group {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-title span {
+        display: none;
+      }
+      
+      .header-actions {
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Overlay for mobile sidebar -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  
+  <header class="header">
+    <div class="container">
+      <div class="header-left">
+        <button class="btn btn-icon" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="header-title">
+          <i class="fas fa-user-plus"></i>
+          <span>Add New User</span>
+        </h1>
+      </div>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="btn btn-icon">
+          <i class="fas fa-bell"></i>
+        </button>
+        <div class="user-avatar">
+          <img src="/logo.png" alt="Admin" width="40" height="40" class="rounded-circle">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <aside class="sidebar" id="sidebar">
+    <ul class="sidebar-menu">
+      <li class="sidebar-item">
+        <a href="index.html" class="sidebar-link">
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="admin.html" class="sidebar-link active">
+          <i class="fas fa-user-plus"></i>
+          <span>Add User</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="dashboard.html" class="sidebar-link">
+          <i class="fas fa-users-cog"></i>
+          <span>Manage Users</span>
+        </a>
+      </li>
+      <li class="sidebar-item">
+        <a href="settings.html" class="sidebar-link">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <main class="main-content" id="mainContent">
+    <div class="container">
+      <div id="maintenanceWarning" class="maintenance-warning" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i> Site is currently in Maintenance Mode. User additions might be affected.
+      </div>
+      <div class="card">
+        <h2>Create New User Account</h2>
+        <form id="addUserForm">
+          <div class="form-group">
+            <label for="username" class="label">Username</label>
+            <input type="text" id="username" class="form-control" placeholder="Enter username" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="label">Password</label>
+            <div class="password-container">
+              <input type="password" id="password" class="form-control" placeholder="Enter password" required>
+              <button type="button" class="btn btn-icon toggle-password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="validity" class="label">Valid Until</label>
+            <input type="datetime-local" id="validity" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="label">Status</label>
+            <div class="form-check">
+              <input type="checkbox" id="statusCheckbox" class="form-check-input">
+              <label for="statusCheckbox" class="form-check-label">Active User</label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="label">Device Access</label>
+            <div class="radio-group">
+              <div class="form-check">
+                <input type="radio" id="device1" name="access" value="1" class="form-check-input" checked>
+                <label for="device1" class="form-check-label">1 Device</label>
+              </div>
+              <div class="form-check">
+                <input type="radio" id="deviceUnlimited" name="access" value="∞" class="form-check-input">
+                <label for="deviceUnlimited" class="form-check-label">Unlimited Devices</label>
+              </div>
+            </div>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-block save-btn">
+            <i class="fas fa-user-plus"></i> Add User
+          </button>
+          
+          <div id="result" class="form-result"></div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+
+    // Dark mode toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlElement = document.documentElement;
+    
+    // Check for saved theme preference or default to light mode
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', currentTheme);
+    
+    // Update icon based on current theme
+    if (currentTheme === 'dark') {
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const theme = htmlElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      htmlElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      
+      // Update icon
+      themeToggle.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    });
+
+    // Toggle sidebar
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      mainContent.classList.toggle('full-width');
+      sidebarOverlay.classList.toggle('active');
+      
+      // Add animation to hamburger icon
+      const icon = sidebarToggle.querySelector('i');
+      if (sidebar.classList.contains('active')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+
+    // Close sidebar when clicking on overlay
+    sidebarOverlay.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      mainContent.classList.remove('full-width');
+      sidebarOverlay.classList.remove('active');
+      
+      // Reset hamburger icon
+      const icon = sidebarToggle.querySelector('i');
+      icon.classList.remove('fa-times');
+      icon.classList.add('fa-bars');
+    });
+
+    // Toggle password visibility
+    const togglePassword = document.querySelector('.toggle-password');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', () => {
+      const icon = togglePassword.querySelector('i');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+
+    // Add user form
+    const addUserForm = document.getElementById('addUserForm');
+    const resultEl = document.getElementById('result');
+    const submitBtn = addUserForm.querySelector('button[type="submit"]');
+
+    addUserForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Show loading state
+      submitBtn.classList.add('submitting');
+      submitBtn.innerHTML = '<span class="spinner"></span> Adding User...';
+      submitBtn.disabled = true;
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const validity = document.getElementById('validity').value;
+      const isActive = document.getElementById('statusCheckbox').checked;
+      const access = document.querySelector('input[name="access"]:checked').value;
+      const status = isActive ? 'active' : 'inactive';
+      
+      if (!username || !password || !validity) {
+        showResult('Please fill all fields', 'error');
+        resetSubmitButton();
+        return;
+      }
+
+      const date = new Date(validity);
+      const pad = n => n.toString().padStart(2, '0');
+      const formattedDate = `${pad(date.getDate())}-${pad(date.getMonth() + 1)}-${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+      
+      const now = new Date();
+      const rgtime = `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
+      const userRef = ref(db, `userinfo/${username}`);
+      set(userRef, {
+        username: username,
+        password: password,
+        status: status,
+        validity: formattedDate,
+        access: access,
+        device: 'null',
+        rgtime: rgtime
+      }).then(() => {
+        showResult('User added successfully!', 'success');
+        addUserForm.reset();
+        
+        // Add a success animation to the form
+        addUserForm.style.animation = 'pulse 0.5s ease';
+        setTimeout(() => {
+          addUserForm.style.animation = '';
+        }, 500);
+      }).catch((error) => {
+        showResult('Error: ' + error.message, 'error');
+      }).finally(() => {
+        resetSubmitButton();
+      });
+    });
+
+    function resetSubmitButton() {
+      submitBtn.classList.remove('submitting');
+      submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Add User';
+      submitBtn.disabled = false;
+    }
+
+    function showResult(message, type) {
+      resultEl.textContent = message;
+      resultEl.className = `form-result ${type}`;
+      
+      // Trigger animation
+      setTimeout(() => {
+        resultEl.classList.add('show');
+      }, 10);
+      
+      setTimeout(() => {
+        resultEl.classList.remove('show');
+      }, 3000);
+    }
+
+    // Maintenance mode warning
+    const maintenanceWarning = document.getElementById('maintenanceWarning');
+    const settingsRef = ref(db, 'settings/maintenanceMode');
+    onValue(settingsRef, (snapshot) => {
+      const inMaintenance = snapshot.val();
+      if (inMaintenance) {
+        maintenanceWarning.style.display = 'block';
+        // Optionally disable form fields if maintenance mode should prevent additions
+        // addUserForm.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+      } else {
+        maintenanceWarning.style.display = 'none';
+        // addUserForm.querySelectorAll('input, select, button').forEach(el => el.disabled = false);
+      }
+    });
+
+    // Add pulse animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
